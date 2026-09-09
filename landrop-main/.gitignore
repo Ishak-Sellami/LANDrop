@@ -1,0 +1,20 @@
+# Local tooling
+.DS_Store
+.idea/
+*.iml
+
+# Desktop
+sender/desktop/node_modules/
+sender/desktop/dist/
+sender/desktop/coverage/
+sender/desktop/src-tauri/target/
+sender/desktop/src-tauri/gen/schemas/
+
+# Android
+receiver/android/.gradle/
+receiver/android/.kotlin/
+receiver/android/**/build/
+receiver/android/local.properties
+receiver/android/captures/
+*.jks
+*.keystore

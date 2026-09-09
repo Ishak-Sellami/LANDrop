@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LanDrop Receiver</string>
+    <string name="brand_mark" translatable="false">L↗</string>
+    <string name="foundation_label">FOUNDATION PREVIEW</string>
+    <string name="tagline">Local delivery. Your device. Your decision.</string>
+    <string name="status_title">Status</string>
+    <string name="not_connected">Not connected</string>
+    <string name="status_detail">No sender session is active.</string>
+    <string name="waiting_title">Waiting for a LanDrop Desktop sender…</string>
+    <string name="foundation_notice">Discovery and delivery are not enabled in this foundation build. No network listener is running.</string>
+    <string name="receiver_role">LanDrop Receiver is the Android Receiver. Application delivery will always require your consent.</string>
+</resources>

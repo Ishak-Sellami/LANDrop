@@ -1,0 +1,389 @@
+{
+  "delivery_request": {
+    "type": "delivery_request",
+    "protocol_version": 1,
+    "request_id": "req_01JTEST",
+    "session_id": "sess_01JTEST",
+    "presentation": {"mode": "GUI"},
+    "sender": {"display_name": "ISHAQ CYBERTECH"},
+    "application": {
+      "name": "My Application",
+      "version": "1.4.2",
+      "description": "A local test application.",
+      "package_name": "com.example.application",
+      "size_bytes": 26004608,
+      "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    }
+  },
+  "other_messages": [
+    {"type":"delivery_response","request_id":"req_01JTEST","decision":"ACCEPT"},
+    {"type":"delivery_response","request_id":"req_01JTEST","decision":"REJECT"},
+    {"type":"error","request_id":"req_01JTEST","code":"INTEGRITY_MISMATCH","message":"Received file failed integrity verification."}
+  ],
+  "presentation_modes": ["GUI", "NOTIFICATION"],
+  "delivery_states": ["DISCOVERING", "AVAILABLE", "CONNECTING", "SECURE_CHANNEL", "SESSION_ESTABLISHED", "REQUEST_SENT", "WAITING_FOR_DECISION", "ACCEPTED", "TRANSFER_PREPARING", "TRANSFERRING", "VERIFYING", "VERIFIED", "INSTALL_READY", "INSTALLATION_HANDOFF", "COMPLETED", "REJECTED", "FAILED", "CANCELLED"],
+  "error_codes": ["INVALID_REQUEST", "UNSUPPORTED_PROTOCOL", "REQUEST_EXPIRED", "USER_REJECTED", "TRANSFER_CANCELLED", "TRANSFER_TIMEOUT", "CONNECTION_LOST", "FILE_TOO_LARGE", "INVALID_METADATA", "INTEGRITY_MISMATCH", "INSTALLATION_UNAVAILABLE", "INTERNAL_ERROR"],
+  "invalid_requests": [
+    {"path":"type","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"type","value":"unknown","code":"INVALID_REQUEST"},
+    {"path":"protocol_version","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"protocol_version","value":2,"code":"UNSUPPORTED_PROTOCOL"},
+    {"path":"protocol_version","value":0,"code":"INVALID_REQUEST"},
+    {"path":"protocol_version","value":-1,"code":"INVALID_REQUEST"},
+    {"path":"protocol_version","value":"1","code":"INVALID_REQUEST"},
+    {"path":"protocol_version","value":1.0,"code":"INVALID_REQUEST"},
+    {"path":"protocol_version","value":2147483648,"code":"INVALID_REQUEST"},
+    {"path":"request_id","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"request_id","value":null,"code":"INVALID_REQUEST"},
+    {"path":"request_id","value":"../request","code":"INVALID_REQUEST"},
+    {"path":"request_id","value":"","code":"INVALID_REQUEST"},
+    {"path":"session_id","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"session_id","value":" session ","code":"INVALID_REQUEST"},
+    {"path":"presentation","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"presentation","value":["GUI"],"code":"INVALID_REQUEST"},
+    {"path":"presentation.mode","value":"gui","code":"INVALID_REQUEST"},
+    {"path":"presentation.mode","value":{"GUI":null},"code":"INVALID_REQUEST"},
+    {"path":"sender","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"sender","value":["ISHAQ CYBERTECH"],"code":"INVALID_REQUEST"},
+    {"path":"sender.display_name","value":"   ","code":"INVALID_METADATA"},
+    {"path":"application","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"application","value":[],"code":"INVALID_REQUEST"},
+    {"path":"application.name","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"application.name","value":"","code":"INVALID_METADATA"},
+    {"path":"application.version","value":null,"code":"INVALID_REQUEST"},
+    {"path":"application.description","remove":true,"code":"INVALID_REQUEST"},
+    {"path":"application.description","value":null,"code":"INVALID_REQUEST"},
+    {"path":"application.sha256","value":"not-a-digest","code":"INVALID_REQUEST"},
+    {"path":"application.package_name","value":"../application","code":"INVALID_METADATA"},
+    {"path":"application.size_bytes","value":0,"code":"INVALID_METADATA"},
+    {"path":"application.size_bytes","value":-1,"code":"INVALID_METADATA"},
+    {"path":"application.size_bytes","value":4294967297,"code":"FILE_TOO_LARGE"},
+    {"path":"application.icon","value":"unapproved-extension","code":"INVALID_REQUEST"},
+    {"path":"unexpected","value":true,"code":"INVALID_REQUEST"}
+  ],
+  "invalid_messages": [
+    {"type":"delivery_response","request_id":"req_01JTEST","decision":"MAYBE"},
+    {"type":"delivery_response","request_id":"req_01JTEST","decision":{"ACCEPT":null}},
+    {"type":"delivery_response","decision":"ACCEPT"},
+    {"type":"error","request_id":"req_01JTEST","code":"UNKNOWN","message":"Rejected"},
+    {"type":"error","request_id":"req_01JTEST","code":{"INTERNAL_ERROR":null},"message":"Rejected"},
+    {"type":"error","request_id":"req_01JTEST","code":"INTERNAL_ERROR"},
+    {"type":"error","request_id":"req_01JTEST","code":"INTERNAL_ERROR","message":null}
+  ],
+  "invalid_integer_tokens": ["-0", "1.0", "1e0", "\"1\"", "true", "null", "9223372036854775808", "-9223372036854775809"],
+  "malformed_json": ["", "{", "[]", "null", "true", "{}", "{\"type\":\"error\",}", "{type:\"error\"}", "{} true", "{\"type\":\"error\",\"message\":\"line\nbreak\"}"],
+  "valid_ids": ["a", "req_01JTEST", "sess_01JTEST", "tr_01JTEST", "A-0_1"],
+  "invalid_ids": ["", " ", "_first", "-first", "a/b", "a\\b", "a.b", "é", "req_01J..."],
+  "delivery_state_machine": {
+    "initial_state": "DISCOVERING",
+    "terminal_states": ["COMPLETED", "REJECTED", "FAILED", "CANCELLED"],
+    "events": [
+      "device_found", "connect_initiated", "secure_channel_established",
+      "session_established", "request_sent", "awaiting_decision", "accepted",
+      "rejected", "transfer_prepared", "transfer_started", "verification_initiated",
+      "verified", "install_prepared", "handoff_initiated", "completed",
+      "cancelled", "expired", "transfer_timed_out", "connection_lost",
+      "integrity_mismatch", "installation_unavailable"
+    ],
+    "transitions": [
+      {"from": "DISCOVERING", "event": "device_found", "to": "AVAILABLE"},
+      {"from": "AVAILABLE", "event": "connect_initiated", "to": "CONNECTING"},
+      {"from": "CONNECTING", "event": "secure_channel_established", "to": "SECURE_CHANNEL"},
+      {"from": "CONNECTING", "event": "connection_lost", "to": "FAILED"},
+      {"from": "SECURE_CHANNEL", "event": "session_established", "to": "SESSION_ESTABLISHED"},
+      {"from": "SECURE_CHANNEL", "event": "connection_lost", "to": "FAILED"},
+      {"from": "SESSION_ESTABLISHED", "event": "request_sent", "to": "REQUEST_SENT"},
+      {"from": "SESSION_ESTABLISHED", "event": "connection_lost", "to": "FAILED"},
+      {"from": "REQUEST_SENT", "event": "awaiting_decision", "to": "WAITING_FOR_DECISION"},
+      {"from": "REQUEST_SENT", "event": "connection_lost", "to": "FAILED"},
+      {"from": "WAITING_FOR_DECISION", "event": "accepted", "to": "ACCEPTED"},
+      {"from": "WAITING_FOR_DECISION", "event": "rejected", "to": "REJECTED"},
+      {"from": "WAITING_FOR_DECISION", "event": "expired", "to": "FAILED"},
+      {"from": "WAITING_FOR_DECISION", "event": "connection_lost", "to": "FAILED"},
+      {"from": "ACCEPTED", "event": "transfer_prepared", "to": "TRANSFER_PREPARING"},
+      {"from": "ACCEPTED", "event": "cancelled", "to": "CANCELLED"},
+      {"from": "ACCEPTED", "event": "connection_lost", "to": "FAILED"},
+      {"from": "TRANSFER_PREPARING", "event": "transfer_started", "to": "TRANSFERRING"},
+      {"from": "TRANSFER_PREPARING", "event": "cancelled", "to": "CANCELLED"},
+      {"from": "TRANSFER_PREPARING", "event": "connection_lost", "to": "FAILED"},
+      {"from": "TRANSFERRING", "event": "verification_initiated", "to": "VERIFYING"},
+      {"from": "TRANSFERRING", "event": "cancelled", "to": "CANCELLED"},
+      {"from": "TRANSFERRING", "event": "connection_lost", "to": "FAILED"},
+      {"from": "TRANSFERRING", "event": "transfer_timed_out", "to": "FAILED"},
+      {"from": "VERIFYING", "event": "verified", "to": "VERIFIED"},
+      {"from": "VERIFYING", "event": "cancelled", "to": "CANCELLED"},
+      {"from": "VERIFYING", "event": "connection_lost", "to": "FAILED"},
+      {"from": "VERIFYING", "event": "integrity_mismatch", "to": "FAILED"},
+      {"from": "VERIFIED", "event": "install_prepared", "to": "INSTALL_READY"},
+      {"from": "VERIFIED", "event": "cancelled", "to": "CANCELLED"},
+      {"from": "INSTALL_READY", "event": "handoff_initiated", "to": "INSTALLATION_HANDOFF"},
+      {"from": "INSTALL_READY", "event": "cancelled", "to": "CANCELLED"},
+      {"from": "INSTALL_READY", "event": "installation_unavailable", "to": "FAILED"},
+      {"from": "INSTALLATION_HANDOFF", "event": "completed", "to": "COMPLETED"},
+      {"from": "INSTALLATION_HANDOFF", "event": "installation_unavailable", "to": "FAILED"}
+    ]
+  },
+  "framing": {
+    "length_bytes": 4,
+    "byte_order": "big_endian",
+    "max_payload_bytes": 65536,
+    "payloads": {
+      "empty": "",
+      "error_integrity": "{\"type\":\"error\",\"request_id\":\"req_01JTEST\",\"code\":\"INTEGRITY_MISMATCH\",\"message\":\"Received file failed integrity verification.\"}",
+      "response_accept": "{\"type\":\"delivery_response\",\"request_id\":\"req_01JTEST\",\"decision\":\"ACCEPT\"}",
+      "request_gui": "{\"type\":\"delivery_request\",\"protocol_version\":1,\"request_id\":\"req_01JTEST\",\"session_id\":\"sess_01JTEST\",\"presentation\":{\"mode\":\"GUI\"},\"sender\":{\"display_name\":\"ISHAQ CYBERTECH\"},\"application\":{\"name\":\"My Application\",\"version\":\"1.4.2\",\"description\":\"A local test application.\",\"package_name\":\"com.example.application\",\"size_bytes\":26004608,\"sha256\":\"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\"}}"
+    },
+    "frame_sequence": ["error_integrity", "response_accept"],
+    "malformed_frames": [
+      {"name": "empty_input", "hex": ""},
+      {"name": "truncated_header", "hex": "aabb"},
+      {"name": "truncated_body", "hex": "00000004aa"},
+      {"name": "oversized_length", "hex": "00020000aabb"},
+      {"name": "wild_length", "hex": "ffffffff"}
+    ],
+    "zero_length_frame": "00000000"
+  },
+  "session_cases": [
+    {"session_id": "sess_01JTEST", "protocol_version": 1, "created_at_ms": 0, "expires_at_ms": 1000, "now_ms": 500, "status": "active"},
+    {"session_id": "sess_01JTEST", "protocol_version": 1, "created_at_ms": 0, "expires_at_ms": 1000, "now_ms": 999, "status": "active"},
+    {"session_id": "sess_01JTEST", "protocol_version": 1, "created_at_ms": 0, "expires_at_ms": 1000, "now_ms": 1000, "status": "expired"},
+    {"session_id": "sess_01JTEST", "protocol_version": 1, "created_at_ms": 0, "expires_at_ms": 1000, "now_ms": 2000, "status": "expired"},
+    {"session_id": "sess_01JTEST", "protocol_version": 1, "created_at_ms": 500, "expires_at_ms": 1000, "now_ms": 100, "status": "not_started"},
+    {"session_id": "sess_01JTEST", "protocol_version": 1, "created_at_ms": 500, "expires_at_ms": 1000, "now_ms": 500, "status": "active"}
+  ],
+  "discovery": {
+    "service_type": "_lanDrop._tcp.local",
+    "required_txt_keys": ["protocol_version", "device_name"],
+    "peer": {
+      "service": "_lanDrop._tcp.local",
+      "hostname": "receiver-device.local",
+      "port": 45821,
+      "protocol_version": 1,
+      "device_name": "Android Device"
+    },
+    "peer_with_extra_txt": {
+      "service": "_lanDrop._tcp.local",
+      "hostname": "receiver-device.local",
+      "port": 45821,
+      "protocol_version": 1,
+      "device_name": "Android Device",
+      "extra_txt_keys": ["lanDrop_version=0.1.0", "capability=apk_delivery"]
+    },
+    "unsupported_version_peer": {
+      "service": "_lanDrop._tcp.local",
+      "hostname": "receiver-device.local",
+      "port": 45821,
+      "protocol_version": 2,
+      "device_name": "Android Device"
+    },
+    "invalid_discovery_infos": [
+      {"name": "wrong_service", "mutations": {"service": "_other._tcp.local"}, "problem": "INVALID_SERVICE"},
+      {"name": "missing_service", "mutations": {"service": null}, "problem": "INVALID_SERVICE"},
+      {"name": "empty_hostname", "mutations": {"hostname": ""}, "problem": "INVALID_HOSTNAME"},
+      {"name": "invalid_hostname", "mutations": {"hostname": "has space.local"}, "problem": "INVALID_HOSTNAME"},
+      {"name": "port_zero", "mutations": {"port": 0}, "problem": "INVALID_PORT"},
+      {"name": "port_overflow", "mutations": {"port": 65536}, "problem": "INVALID_PORT"},
+      {"name": "port_non_integer", "mutations": {"port": "45821"}, "problem": "INVALID_PORT"},
+      {"name": "missing_protocol_version", "mutations": {"protocol_version": null}, "problem": "INVALID_PROTOCOL_VERSION"},
+      {"name": "fractional_version", "mutations": {"protocol_version": 1.5}, "problem": "INVALID_PROTOCOL_VERSION"},
+      {"name": "missing_device_name", "mutations": {"device_name": null}, "problem": "INVALID_DEVICE_NAME"},
+      {"name": "blank_device_name", "mutations": {"device_name": "   "}, "problem": "INVALID_DEVICE_NAME"}
+    ],
+    "device_identity": {"id_format": "hostname:port"},
+    "events": [
+      {"event": "appear", "peer": "peer"},
+      {"event": "appear_again", "peer": "peer", "note": "duplicate upsert keeps a single entry"},
+      {"event": "disappear", "peer": "peer", "note": "removal by identity; no TTL is invented"}
+    ]
+  },
+  "connection": {
+    "endpoint": {"hostname": "receiver-device.local", "port": 45821},
+    "outcomes": ["established", "refused", "timeout", "closed", "io_error"],
+    "failure_mapping": [
+      {"outcome": "refused", "transport_kind": "IO_ERROR", "message": "connection refused"},
+      {"outcome": "timeout", "transport_kind": "TIMEOUT", "message": "connection timed out"},
+      {"outcome": "closed", "transport_kind": "CONNECTION_LOST", "message": "connection closed"},
+      {"outcome": "io_error", "transport_kind": "IO_ERROR", "message": "transport I/O error"}
+    ],
+    "cases": [
+      {"name": "refused", "outcome_events": ["connect_initiated", "connection_lost"]},
+      {"name": "timeout", "outcome_events": ["connect_initiated", "connection_lost"]},
+      {"name": "immediate_close", "outcome_events": ["connect_initiated", "connection_lost"]},
+      {"name": "established_then_lost", "outcome_events": ["connect_initiated", "connection_lost"]}
+    ]
+  },
+  "secure_channel": {
+    "outcomes": ["established", "handshake_failure", "validation_failure", "timeout", "closed"],
+    "failure_mapping": [
+      {"outcome": "handshake_failure", "transport_kind": "IO_ERROR", "message": "TLS handshake failed"},
+      {"outcome": "validation_failure", "transport_kind": "IO_ERROR", "message": "certificate validation failed (trust model undefined)"},
+      {"outcome": "timeout", "transport_kind": "TIMEOUT", "message": "TLS handshake timed out"},
+      {"outcome": "closed", "transport_kind": "CONNECTION_LOST", "message": "connection closed during TLS handshake"}
+    ],
+    "event_mapping": [
+      {"outcome": "established", "event": "secure_channel_established"},
+      {"outcome": "handshake_failure", "event": "connection_lost"},
+      {"outcome": "validation_failure", "event": "connection_lost"},
+      {"outcome": "timeout", "event": "connection_lost"},
+      {"outcome": "closed", "event": "connection_lost"}
+    ]
+  },
+  "negotiation": {
+    "supported_versions": [1],
+    "version_outcomes": [
+      {"version": 1, "result": "supported"},
+      {"version": 2, "result": "unsupported"},
+      {"version": 0, "result": "unsupported"},
+      {"version": -1, "result": "unsupported"},
+      {"version": 1.5, "result": "unsupported"}
+    ]
+  },
+  "delivery_event_mapping": [
+    {"layer": "discovery", "condition": "peer appears", "event": "device_found"},
+    {"layer": "connection", "condition": "connection attempt begins", "event": "connect_initiated"},
+    {"layer": "secure_channel", "condition": "TLS 1.3 established", "event": "secure_channel_established"},
+    {"layer": "session", "condition": "valid session created after negotiation", "event": "session_established"},
+    {"layer": "connection", "condition": "connection lost at any stage", "event": "connection_lost"}
+  ],
+  "delivery_lifecycle": {
+    "session_id": "sess_01JTEST",
+    "request_id": "req_01JTEST",
+    "transfer_id": "tr_01JTEST",
+    "declared_size": 26004608,
+    "happy_path": [
+      {"op": "send_request", "event": "request_sent", "next": "REQUEST_SENT"},
+      {"op": "await_decision", "event": "awaiting_decision", "next": "WAITING_FOR_DECISION"},
+      {"op": "accept", "event": "accepted", "next": "ACCEPTED"},
+      {"op": "prepare_transfer", "event": "transfer_prepared", "next": "TRANSFER_PREPARING"},
+      {"op": "begin_transfer", "event": "transfer_started", "next": "TRANSFERRING"},
+      {"op": "record_bytes", "event": null, "next": "TRANSFERRING"},
+      {"op": "complete_transfer", "event": "verification_initiated", "next": "VERIFYING"}
+    ],
+    "receiver_happy_path": [
+      {"op": "receive_request", "event": "request_sent", "next": "REQUEST_SENT"},
+      {"op": "await_decision", "event": "awaiting_decision", "next": "WAITING_FOR_DECISION"},
+      {"op": "accept", "event": "accepted", "next": "ACCEPTED"},
+      {"op": "prepare_transfer", "event": "transfer_prepared", "next": "TRANSFER_PREPARING"},
+      {"op": "begin_transfer", "event": "transfer_started", "next": "TRANSFERRING"},
+      {"op": "record_bytes", "event": null, "next": "TRANSFERRING"},
+      {"op": "complete_transfer", "event": "verification_initiated", "next": "VERIFYING"}
+    ],
+    "rejection_path": [
+      {"op": "send_request", "event": "request_sent", "next": "REQUEST_SENT"},
+      {"op": "await_decision", "event": "awaiting_decision", "next": "WAITING_FOR_DECISION"},
+      {"op": "reject", "event": "rejected", "next": "REJECTED"}
+    ],
+    "expiration_path": [
+      {"op": "send_request", "event": "request_sent", "next": "REQUEST_SENT"},
+      {"op": "await_decision", "event": "awaiting_decision", "next": "WAITING_FOR_DECISION"},
+      {"op": "expire", "event": "expired", "next": "FAILED"}
+    ],
+    "cancellation_during_prepare": [
+      {"op": "send_request", "event": "request_sent", "next": "REQUEST_SENT"},
+      {"op": "await_decision", "event": "awaiting_decision", "next": "WAITING_FOR_DECISION"},
+      {"op": "accept", "event": "accepted", "next": "ACCEPTED"},
+      {"op": "cancel", "event": "cancelled", "next": "CANCELLED"}
+    ],
+    "connection_loss_during_transfer": [
+      {"op": "send_request", "event": "request_sent", "next": "REQUEST_SENT"},
+      {"op": "await_decision", "event": "awaiting_decision", "next": "WAITING_FOR_DECISION"},
+      {"op": "accept", "event": "accepted", "next": "ACCEPTED"},
+      {"op": "prepare_transfer", "event": "transfer_prepared", "next": "TRANSFER_PREPARING"},
+      {"op": "begin_transfer", "event": "transfer_started", "next": "TRANSFERRING"},
+      {"op": "connection_lost", "event": "connection_lost", "next": "FAILED"}
+    ],
+    "transfer_timeout_during_transfer": [
+      {"op": "send_request", "event": "request_sent", "next": "REQUEST_SENT"},
+      {"op": "await_decision", "event": "awaiting_decision", "next": "WAITING_FOR_DECISION"},
+      {"op": "accept", "event": "accepted", "next": "ACCEPTED"},
+      {"op": "prepare_transfer", "event": "transfer_prepared", "next": "TRANSFER_PREPARING"},
+      {"op": "begin_transfer", "event": "transfer_started", "next": "TRANSFERRING"},
+      {"op": "transfer_timeout", "event": "transfer_timed_out", "next": "FAILED"}
+    ]
+  },
+  "transfer_progress_message": {
+    "type": "transfer_progress",
+    "transfer_id": "tr_01JTEST",
+    "bytes_transferred": 14800000,
+    "total_bytes": 26004608
+  },
+  "transfer_cancel_message": {
+    "type": "transfer_cancel",
+    "transfer_id": "tr_01JTEST"
+  },
+  "invalid_transfer_messages": [
+    {"type": "transfer_progress", "transfer_id": "tr_01JTEST", "bytes_transferred": -1, "total_bytes": 26004608},
+    {"type": "transfer_progress", "transfer_id": "tr_01JTEST", "bytes_transferred": 30000000, "total_bytes": 26004608},
+    {"type": "transfer_progress", "transfer_id": "tr_01JTEST", "bytes_transferred": 14800000, "total_bytes": 26004608, "extra": true},
+    {"type": "transfer_progress", "transfer_id": "../tr", "bytes_transferred": 100, "total_bytes": 200},
+    {"type": "transfer_progress", "transfer_id": "tr_01JTEST", "total_bytes": 26004608},
+    {"type": "transfer_cancel", "transfer_id": ""},
+    {"type": "transfer_cancel"}
+  ],
+  "delivery_decisions": [
+    {"decision": "ACCEPT", "event": "accepted", "next": "ACCEPTED"},
+    {"decision": "REJECT", "event": "rejected", "next": "REJECTED"}
+  ],
+  "integrity": {
+    "algorithm": "SHA-256",
+    "digest_format": "64 lowercase hex; comparison is case-insensitive",
+    "expected_digest_source": "delivery_request.application.sha256",
+    "digest_computation": "platform-provided crypto (Node crypto / JVM MessageDigest); never custom",
+    "known_hashes": {
+      "empty": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ascii_abc": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "ascii_hello": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    },
+    "verdicts": [
+      {"name": "match_exact", "expected": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", "actual": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", "verdict": "VERIFIED"},
+      {"name": "match_case_insensitive", "expected": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789abcdef", "actual": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", "verdict": "VERIFIED"},
+      {"name": "mismatch", "expected": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", "actual": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "verdict": "INTEGRITY_MISMATCH"}
+    ]
+  },
+  "integration": {
+    "note": "Desktop <-> Android integration scenarios (Phase 08). The artifact contents are UTF-8 strings whose total byte length equals the sum of transfer.chunk_sizes; the harness recomputes SHA-256 over the received bytes and never trusts the fixture digest. transfer_id has no wire carrier (protocol spec §17-§19) and the binary plane has no framing markers, so the harness assigns both peers the same transfer id (offline-mirror convention) exactly as delivery-flow.test.ts does.",
+    "scenarios": [
+      {
+        "name": "full_lifecycle_success",
+        "description": "discover -> connect -> TLS -> session -> request -> ACCEPT -> binary transfer -> SHA-256 verification -> install handoff -> COMPLETED on both peers",
+        "decision": "ACCEPT",
+        "artifact": {"contents": ["LanDrop", "-", "phase-08"], "chunk_sizes": [7, 1, 8]},
+        "declared_sha256": "c55f71ee76b6c6dbc51849d51bdc41002e27f9d38405fbaa669ab9f14605e133",
+        "expectation": {"sender_final_state": "COMPLETED", "receiver_final_state": "COMPLETED", "installer_invoked": true}
+      },
+      {
+        "name": "integrity_mismatch_on_wire",
+        "description": "a corrupted artifact byte on the wire makes the Receiver's computed digest differ from the declared hash -> INTEGRITY_MISMATCH, FAILED, installer never invoked",
+        "decision": "ACCEPT",
+        "artifact": {"contents": ["Mismatch-", "on-", "the-wire"], "chunk_sizes": [9, 3, 8]},
+        "declared_sha256": "23c10cdd6761daefe46e724d25d85e921226bf9a7ab5906918d6ea603227baea",
+        "tamper": {"corrupt_byte_at": 6},
+        "expectation": {"sender_final_state": "FAILED", "receiver_final_state": "FAILED", "installer_invoked": false}
+      },
+      {
+        "name": "rejected_request",
+        "description": "user REJECTs the delivery request -> both peers REJECTED, no transfer, installer never invoked",
+        "decision": "REJECT",
+        "expectation": {"sender_final_state": "REJECTED", "receiver_final_state": "REJECTED", "installer_invoked": false}
+      },
+      {
+        "name": "sender_cancelled_mid_transfer",
+        "description": "user cancels on the Sender mid-transfer. The Sender reaches CANCELLED locally and writes transfer_cancel, but the binary plane has no framing markers, so the Receiver cannot demux that frame out of the artifact stream (recorded spec gap): the Receiver's host reports the aborted transfer and both peers stop. Installer never invoked.",
+        "decision": "ACCEPT",
+        "artifact": {"contents": ["cancel-flow"], "chunk_sizes": [11]},
+        "declared_sha256": "4e6831af740b25684238b3b325aee1e8ecea42c46124964f321e6fe770609f15",
+        "cancel_after_bytes": 6,
+        "expectation": {"sender_final_state": "CANCELLED", "receiver_final_state": "FAILED", "installer_invoked": false}
+      },
+      {
+        "name": "connection_lost_mid_transfer",
+        "description": "transport loss mid-transfer (spec §27) -> connection_lost, FAILED on both peers, installer never invoked",
+        "decision": "ACCEPT",
+        "artifact": {"contents": ["loss-after"], "chunk_sizes": [10]},
+        "declared_sha256": "0b0d1355ae4e83b1cf8994d6bb43f56b0cb130239c81637b7f7633fa8b5d66e4",
+        "loss_after_bytes": 8,
+        "expectation": {"sender_final_state": "FAILED", "receiver_final_state": "FAILED", "installer_invoked": false}
+      }
+    ]
+  }
+}
