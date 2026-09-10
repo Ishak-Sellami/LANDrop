@@ -281,7 +281,11 @@ impl DeliveryEngine {
         if let Some(terminal) = self.require_no_terminal() {
             return outcome_problem(terminal);
         }
+        // A rejected application must not emit a stale cleanup instruction.
         let applied = self.apply(DeliveryEvent::Expired, DeliveryState::WaitingForDecision);
+        if !applied.ok {
+            return applied;
+        }
         Self::finish(applied, DeliveryAction::Cleanup)
     }
 
@@ -454,6 +458,9 @@ impl DeliveryEngine {
             return outcome_problem(DeliveryProblem::InvalidState);
         }
         let applied = self.apply(DeliveryEvent::InstallationUnavailable, self.state);
+        if !applied.ok {
+            return applied;
+        }
         Self::finish(applied, DeliveryAction::Cleanup)
     }
 
@@ -463,6 +470,9 @@ impl DeliveryEngine {
             return outcome_problem(terminal);
         }
         let applied = self.apply(DeliveryEvent::Cancelled, self.state);
+        if !applied.ok {
+            return applied;
+        }
         Self::finish(applied, DeliveryAction::Cleanup)
     }
 
@@ -478,6 +488,9 @@ impl DeliveryEngine {
             return outcome_problem(DeliveryProblem::TransferIdMismatch);
         }
         let applied = self.apply(DeliveryEvent::Cancelled, self.state);
+        if !applied.ok {
+            return applied;
+        }
         Self::finish(applied, DeliveryAction::StopStream)
     }
 
@@ -490,6 +503,9 @@ impl DeliveryEngine {
             return outcome_problem(DeliveryProblem::InvalidState);
         }
         let applied = self.apply(DeliveryEvent::TransferTimedOut, DeliveryState::Transferring);
+        if !applied.ok {
+            return applied;
+        }
         Self::finish(applied, DeliveryAction::Cleanup)
     }
 
@@ -499,6 +515,9 @@ impl DeliveryEngine {
             return outcome_problem(terminal);
         }
         let applied = self.apply(DeliveryEvent::ConnectionLost, self.state);
+        if !applied.ok {
+            return applied;
+        }
         Self::finish(applied, DeliveryAction::Cleanup)
     }
 }

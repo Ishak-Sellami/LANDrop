@@ -385,5 +385,34 @@
         "expectation": {"sender_final_state": "FAILED", "receiver_final_state": "FAILED", "installer_invoked": false}
       }
     ]
+  },
+  "security": {
+    "note": "Phase 09 security-hardening vectors. Presence/status-only assertions: the harness drives each vector and checks only the deterministic verdict; no vector carries trusted payload bytes. Shared by sender/desktop security.test.ts (TS, executed) and the receiver SecurityTest.kt (Kotlin mirror of the same semantics).",
+    "metadata_path_vectors": [
+      {"name": "plain_java_dots_ok", "package_name": "com.example.application", "expect": "accepted"},
+      {"name": "embedded_slash", "package_name": "com/example/application", "expect": "rejected"},
+      {"name": "relative_traversal", "package_name": "../../evil", "expect": "rejected"},
+      {"name": "absolute_posix", "package_name": "/data/local/tmp/evil.apk", "expect": "rejected"},
+      {"name": "absolute_windows", "package_name": "C:\\evil.apk", "expect": "rejected"},
+      {"name": "percent_encoded_dots", "package_name": "%2e%2e%2fevil.apk", "expect": "rejected"},
+      {"name": "dots_only", "package_name": "..", "expect": "rejected"},
+      {"name": "descriptor_colon", "package_name": "com.example.application:evil", "expect": "rejected"}
+    ],
+    "duplicate_key_jsons": [
+      {"name": "duplicate_type", "json": "{\"type\":\"hello\",\"type\":\"hello\"}", "expect": "LAST_VALUE_WINS"},
+      {"name": "duplicate_protocol_version", "json": "{\"type\":\"hello\",\"protocol_version\":1,\"protocol_version\":2}", "expect": "LAST_VALUE_WINS"},
+      {"name": "duplicate_package_name", "json": "{\"type\":\"delivery_request\",\"protocol_version\":1,\"request_id\":\"req_01JTEST\",\"session_id\":\"sess_01JTEST\",\"presentation\":{\"mode\":\"GUI\"},\"sender\":{\"display_name\":\"A\"},\"application\":{\"name\":\"A\",\"version\":\"1\",\"description\":\"d\",\"package_name\":\"com.example.application\",\"package_name\":\"../../evil\",\"size_bytes\":100,\"sha256\":\"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\"}}", "expect": "LAST_VALUE_WINS"}
+    ],
+    "depth_bombs": [
+      {"depth": 17, "expect": "INVALID_REQUEST"},
+      {"depth": 32, "expect": "INVALID_REQUEST"},
+      {"depth": 64, "expect": "INVALID_REQUEST"},
+      {"depth": 1024, "expect": "INVALID_REQUEST"}
+    ],
+    "frame_boundaries": [
+      {"name": "length_at_limit", "length": 65536, "expect": "incomplete"},
+      {"name": "length_over_limit", "length": 65537, "expect": "FRAME_TOO_LARGE"},
+      {"name": "zero_length", "expect": "INVALID_REQUEST"}
+    ]
   }
 }

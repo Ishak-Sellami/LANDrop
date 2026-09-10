@@ -234,7 +234,10 @@ export class DeliveryEngine {
   expire(): DeliveryOutcome {
     const terminal = this.requireNoTerminal();
     if (terminal !== null) return deliveryOutcomeProblem(terminal);
-    return this.finish(this.apply("expired", "WAITING_FOR_DECISION"), { kind: "cleanup" });
+    // A rejected application must not emit a stale cleanup instruction.
+    const applied = this.apply("expired", "WAITING_FOR_DECISION");
+    if (!applied.ok) return applied;
+    return this.finish(applied, { kind: "cleanup" });
   }
 
   // --- Transfer preparation (spec §16) -----------------------------------------
@@ -357,9 +360,9 @@ export class DeliveryEngine {
     if (this._state !== "INSTALL_READY" && this._state !== "INSTALLATION_HANDOFF") {
       return deliveryOutcomeProblem("INVALID_STATE");
     }
-    return this.finish(this.apply("installation_unavailable", this._state), {
-      kind: "cleanup",
-    });
+    const applied = this.apply("installation_unavailable", this._state);
+    if (!applied.ok) return applied;
+    return this.finish(applied, { kind: "cleanup" });
   }
 
   // --- Cancellation (spec §24; machine-gated) ------------------------------------
@@ -379,7 +382,9 @@ export class DeliveryEngine {
     if (terminal !== null) return deliveryOutcomeProblem(terminal);
     if (this._transferId === null) return deliveryOutcomeProblem("NO_TRANSFER");
     if (transferId !== this._transferId) return deliveryOutcomeProblem("TRANSFER_ID_MISMATCH");
-    return this.finish(this.apply("cancelled", this._state), { kind: "stop_stream" });
+    const applied = this.apply("cancelled", this._state);
+    if (!applied.ok) return applied;
+    return this.finish(applied, { kind: "stop_stream" });
   }
 
   // --- Transfer inactivity timeout (spec §26) --------------------------------------
@@ -388,7 +393,9 @@ export class DeliveryEngine {
     const terminal = this.requireNoTerminal();
     if (terminal !== null) return deliveryOutcomeProblem(terminal);
     if (this._state !== "TRANSFERRING") return deliveryOutcomeProblem("INVALID_STATE");
-    return this.finish(this.apply("transfer_timed_out", "TRANSFERRING"), { kind: "cleanup" });
+    const applied = this.apply("transfer_timed_out", "TRANSFERRING");
+    if (!applied.ok) return applied;
+    return this.finish(applied, { kind: "cleanup" });
   }
 
   // --- Connection loss at any pre-terminal stage (spec §27) --------------------------
@@ -396,6 +403,8 @@ export class DeliveryEngine {
   connectionLost(): DeliveryOutcome {
     const terminal = this.requireNoTerminal();
     if (terminal !== null) return deliveryOutcomeProblem(terminal);
-    return this.finish(this.apply("connection_lost", this._state), { kind: "cleanup" });
+    const applied = this.apply("connection_lost", this._state);
+    if (!applied.ok) return applied;
+    return this.finish(applied, { kind: "cleanup" });
   }
 }

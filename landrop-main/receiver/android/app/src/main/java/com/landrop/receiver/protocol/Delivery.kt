@@ -169,7 +169,9 @@ class DeliveryEngine(
     /** Expiration (spec §25; the numeric timeout is a recorded gap). */
     fun expire(): DeliveryOutcome {
         requireNoTerminal()?.let { return outcomeProblem(it) }
+        // A rejected application must not emit a stale cleanup instruction.
         val applied = apply(DeliveryEvent.EXPIRED, DeliveryState.WAITING_FOR_DECISION)
+        if (!applied.ok) return applied
         return finish(applied, DeliveryAction.Cleanup)
     }
 
@@ -274,6 +276,7 @@ class DeliveryEngine(
             return outcomeProblem(DeliveryProblem.INVALID_STATE)
         }
         val applied = apply(DeliveryEvent.INSTALLATION_UNAVAILABLE, state)
+        if (!applied.ok) return applied
         return finish(applied, DeliveryAction.Cleanup)
     }
 
@@ -281,6 +284,7 @@ class DeliveryEngine(
     fun cancel(): DeliveryOutcome {
         requireNoTerminal()?.let { return outcomeProblem(it) }
         val applied = apply(DeliveryEvent.CANCELLED, state)
+        if (!applied.ok) return applied
         return finish(applied, DeliveryAction.Cleanup)
     }
 
@@ -290,6 +294,7 @@ class DeliveryEngine(
         val active = transferId ?: return outcomeProblem(DeliveryProblem.NO_TRANSFER)
         if (active != id) return outcomeProblem(DeliveryProblem.TRANSFER_ID_MISMATCH)
         val applied = apply(DeliveryEvent.CANCELLED, state)
+        if (!applied.ok) return applied
         return finish(applied, DeliveryAction.StopStream)
     }
 
@@ -298,6 +303,7 @@ class DeliveryEngine(
         requireNoTerminal()?.let { return outcomeProblem(it) }
         if (state != DeliveryState.TRANSFERRING) return outcomeProblem(DeliveryProblem.INVALID_STATE)
         val applied = apply(DeliveryEvent.TRANSFER_TIMED_OUT, DeliveryState.TRANSFERRING)
+        if (!applied.ok) return applied
         return finish(applied, DeliveryAction.Cleanup)
     }
 
@@ -305,6 +311,7 @@ class DeliveryEngine(
     fun connectionLost(): DeliveryOutcome {
         requireNoTerminal()?.let { return outcomeProblem(it) }
         val applied = apply(DeliveryEvent.CONNECTION_LOST, state)
+        if (!applied.ok) return applied
         return finish(applied, DeliveryAction.Cleanup)
     }
 }

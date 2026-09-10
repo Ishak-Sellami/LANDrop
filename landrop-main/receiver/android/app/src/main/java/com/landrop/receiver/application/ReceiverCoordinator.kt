@@ -265,9 +265,20 @@ class ReceiverCoordinator(
 
     private fun afterVerified(artifact: OwnedArtifact) {
         observer("verified")
-        if (!engine.prepareInstall().ok) return
+        val prepared = engine.prepareInstall()
+        if (!prepared.ok) {
+            // Fail closed: a machine that refuses to advance may not leave a
+            // verified artifact behind (Phase 09 hardening, Invariant 9/10).
+            observer("prepare_install_error: ${prepared.problem}")
+            store.delete()
+            return
+        }
         val handoff = engine.handoffInstall()
-        if (!handoff.ok) return
+        if (!handoff.ok) {
+            observer("handoff_error: ${handoff.problem}")
+            store.delete()
+            return
+        }
         recordAction(handoff)
         when (val outcome = installer.install(artifact)) {
             InstallOutcome.Succeeded -> {
