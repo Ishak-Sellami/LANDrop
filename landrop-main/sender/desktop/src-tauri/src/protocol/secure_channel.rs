@@ -26,8 +26,9 @@ pub const SECURE_CHANNEL_OUTCOMES: [SecureChannelOutcome; 5] = [
     SecureChannelOutcome::Closed,
 ];
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum SecureChannelPhase {
+    #[default]
     Idle,
     Tls,
     Established,

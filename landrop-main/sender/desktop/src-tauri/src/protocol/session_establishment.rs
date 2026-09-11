@@ -4,7 +4,7 @@
 // negotiation mechanism is a SPECIFICATION GAP; the only defined version is 1,
 // so negotiation is a deterministic version gate).
 
-use super::{create_session, DeliveryEvent, DeviceInfo, Lifetime, SenderProfile, SessionDraft, CURRENT_PROTOCOL_VERSION};
+use super::{create_session, DeliveryEvent, SessionDraft, CURRENT_PROTOCOL_VERSION};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SessionEstablishmentProblem {

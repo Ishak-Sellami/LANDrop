@@ -123,14 +123,17 @@ impl DiscoveryRegistry {
     }
 
     pub fn upsert(&mut self, info: DiscoveryInfo) {
-        let device = DiscoveredDevice {
-            identity: device_identity(&info.hostname, info.port),
-            hostname: info.hostname,
-            port: info.port,
-            protocol_version: info.protocol_version,
-            device_name: info.device_name,
-            supported: is_discovery_supported_version(&info),
+    let supported = is_discovery_supported_version(&info);
+
+    let device = DiscoveredDevice {
+        identity: device_identity(&info.hostname, info.port),
+        hostname: info.hostname,
+        port: info.port,
+        protocol_version: info.protocol_version,
+        device_name: info.device_name,
+        supported,
         };
+
         self.entries.insert(device.identity.clone(), device);
     }
 

@@ -25,8 +25,9 @@ pub const CONNECTION_OUTCOMES: [ConnectionOutcome; 5] = [
     ConnectionOutcome::IoError,
 ];
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum ConnectionPhase {
+    #[default]
     Idle,
     Connecting,
     Established,
